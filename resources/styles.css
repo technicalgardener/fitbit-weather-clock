@@ -6,35 +6,35 @@ text {
   text-anchor: middle;
   fill: white;
 }
-
+  
 #background {
   width: 100%;
   height: 100%;
   fill: black;
 }
-
+  
 #time {
   x: 48%;
-  y: 87%;
+  y: 92%;
   font-size: 60;
   text-anchor: end;
 }
-
+  
 #details {
   font-size: 30;
   font-family: System-Regular;
   font-weight: regular;
   text-anchor: start;
   fill: white;
-  x: 55%;
-  y: 80%;
+  x: 15%;
+  y: 75%;
 }
-
-#heart {
+  
+#steps {
   font-family: System-Light;
   fill: white;
   text-anchor: start;
   font-size: 22;
   x: 55%;
-  y: 88%;
+  y: 84%;
 }

@@ -1,84 +1,82 @@
 import * as messaging from "messaging";
 import { geolocation } from "geolocation";
-import { preferences } from "user-settings";
+import { mapCode } from "../common/util";
 
-var LATITUDE;
-var LONGITUDE;
-var APIKEY = "";
-var ENDPOINT = "https://api.openweathermap.org/data/2.5/weather?";
-var FORECASTURL;
+const apiKey = "";
+const endpoint = "https://api.openweathermap.org/data/2.5/weather?";
 
-var COUNT = 0;
-var data;
+let latitude;
+let longitude;
 
-// Fetch Weather Data
-// collects information needed to make api call
-// * this will include prefrences as well in future *
-function fetchWeatherData() {
-  FORECASTURL = ENDPOINT + "lat=" + LATITUDE + "&lon=" + LONGITUDE + "&appid=" + APIKEY;
-  queryWeather(FORECASTURL);
-}
+let ForecastURL;
 
-// for future use 
-//query preferences to get units for display
-function queryPreferences(callback) {}
+let handleCallback;
 
-// Query Location
-// records gps location and calls
 function queryLocation(callback) {
-  geolocation.getCurrentPosition(function(position) {
-    LATITUDE  = position.coords.latitude;
-    LONGITUDE = position.coords.longitude;
-    callback();
-  });
-}
-
-// Query Weather
-// records weather data collected from api
-// so it can be sent back to the device
-function queryWeather(url) {
-  fetch(url).then(function (response) {
-    response.json().then(function (data) {
-      let forecast = {
-        temp:      data.main.temp,
-        unit:      "K",
-        pressure:  data.main.pressure,
-        humidity:  data.main.humidity,
-        condition: data.weather.main,
-        windSpd:   data.wind.speed,
-        windDir:   data.wind.deg,
-        curTime:   data.dt,
-        sunrise:   data.sys.sunrise,
-        sunset:    data.sys.sunset
-      }
-      
-      returnWeatherData(forecast);
+    handleCallback = callback;
+    console.log("querying Location");
+    geolocation.getCurrentPosition(function(position) {
+        console.log("location: " + position.coords.latitude + ", " + position.coords.longitude);
+        latitude  = position.coords.latitude;
+        longitude = position.coords.longitude;
+        handleCallback();
     });
-  }).catch(function (err) {
-    console.error(`Error fetching weather data: ${err}`);
-  });
 }
 
-// sends a message with the collected weather data
-// from the companion (phone) to the device (wearable)
+function fetchWeatherData() {
+    ForecastURL = endpoint + "lat=" + latitude + "&lon=" + longitude + "&appid=" + apiKey;
+    queryWeather(ForecastURL);
+}
+
+function queryWeather(url) {
+    fetch(url).then(function (response) {
+        response.json().then(function (data) {
+            let condition = data.weather[0].id;
+            condition = mapCode[condition];
+
+            let forecast = {
+                temp:            data.main.temp,
+                unit:            "K",
+                condition:       data.weather[0].id,
+                conditionCode:   condition,
+                conditionString: data.weather[0].main,
+                currentTime:     data.dt,
+                sunrise:         data.sys.sunrise,
+                sunset:          data.sys.sunset
+            };
+          
+            returnWeatherData(forecast);
+        }).catch(function (err) {
+          console.error(`Failed to load data: ${err}`);
+        });
+    }).catch(function (err) {
+        console.error(`URL fetch error: ${err}`);
+    });
+}
+
 function returnWeatherData(data) {
-  if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
-    messaging.peerSocket.send(data);
-  } else {
-    console.error("Error: Connection is not open");
-  }
+    if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
+        messaging.peerSocket.send(data);
+    } else {
+        console.error(`Error: Connection is not open`);
+    }
 }
 
-// Listens for requests for weather
-// when recieved its begins the calls to fetch weather data
-// by calling queryLocation for gps,
-// then fetchWeatherData after gps has been recorded
+function locationSuccess(position) {
+    latitude  = position.coords.latitude;
+    longitude = position.coords.longitude;
+}
+
+function locationError(err) {
+    console.error(`Location Error: ${err.code}: ${err.message}`);
+}
+
 messaging.peerSocket.addEventListener("message", (evt) => {
-  if (evt.data && evt.data.command === "weather") {
-    queryLocation(fetchWeatherData);
-  }
+    if (evt.data && evt.data.command === "weather") {
+        queryLocation(fetchWeatherData);
+    }
 });
 
 messaging.peerSocket.addEventListener("error", (err) => {
-  console.error(`Connection error: ${err.code} - ${err.message}`);
-});
+    console.error(`Connection error: ${err.code}: ${err.message}`);
+})

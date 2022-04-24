@@ -1,64 +1,58 @@
 import * as messaging from "messaging";
-import * as util from "../common/utils";
+import { weatherWakeTime } from "../common/constants";
+import { toFahrenheit } from "../common/util.js";
+import { changeBackgroundImg } from "./background";
 
 let handleCallback;
+let currentCondition = "cloudy";
+let lastCondition = "rainy";
 let data;
 
-// Fetch Weather
-// requests updated weather data from the companion device
-function fetchWeather() {
-  if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
-    console.log("Requesting weather");
-    messaging.peerSocket.send({
-      command: "weather"
+export function initialize(callback) {
+    handleCallback = callback;
+    messaging.peerSocket.addEventListener("open", (evt) => {
+        console.log(`Ready to send or recieve messages`); 
+        fetchWeather();  
     });
-  }
+
+    messaging.peerSocket.addEventListener("message", (evt) => {
+        if (evt.data) {
+            console.log(`Message received`);
+            data = evt.data;
+            currentCondition = data.condition;
+            toFahrenheit(data);
+
+            changeBackgroundImg(data);
+            updateData();
+        }
+    });
+    
+    
+    setInterval(fetchWeather, weatherWakeTime);
 }
 
-// Initialize Weather
-// Opens a message listener and calls the function
-// to request weather data. Once message is received
-// data's units are converted and the function call
-// is made to return output to device screen
-export function initialize(callback) {
-  handleCallback = callback;
-  messaging.peerSocket.addEventListener("open", (evt) => {
-    console.log("Ready to send or receive messages");
-    fetchWeather();
-  });
-  
-  messaging.peerSocket.addEventListener("message", (evt) => {
-    if (evt.data) {
-      console.log("MESSAGE received");
-      data = evt.data;
-      util.toFahrenheit(data);
-      
-      updatedData();
+function fetchWeather() {
+    if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
+        console.log(`Requesting weather`);
+        messaging.peerSocket.send({
+            command: "weather"
+        });
+    } else {
+        console.error(`Error: messager not open`);
     }
-  });
-  
-  messaging.peerSocket.addEventListener("error", (err) => {
-    console.error(`Connection error: ${err.code} - ${err.message}`);
-  });
-  
-  // Data Exists
-  // checks to see if valid data has been recieved
-  function existsData() {
-    if (data === undefined) {
-      console.warn("No data found.");
-      return false;
-    }
-    return true;
-  }
+}
 
-  // Updated Data
-  // if data exists then it hands the updated to the callback function
-  function updatedData() {
-    if (typeof handleCallback === "function" && existsData()) {
-      console.log("Sending updated data to display")
-     handleCallback(data);
+function updateData() {
+    if (typeof handleCallback === "function" && dataExists()) {
+        handleCallback(data);
     }
-  }
-  
-  setInterval(fetchWeather, 30 * 1000 * 60);
+}
+
+function dataExists() {
+    if (data === undefined) {
+        console.warn(`No data exists`);
+        return false;
+    }
+
+    return true;
 }

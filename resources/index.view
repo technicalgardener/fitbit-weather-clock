@@ -1,7 +1,7 @@
 <svg>
   <rect id="background" />
-  <image id="img" href="images/day-clear.jpg" />
+  <image id="img" href="images/dayClear.jpg" />
   <text id="time">...</text>
   <text id="details">...</text>
-  <text id="heart">...</text>
+  <text id="steps">...</text>
 </svg>
