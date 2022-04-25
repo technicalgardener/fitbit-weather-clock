@@ -3,5 +3,6 @@
   <image id="img" href="images/dayClear.jpg" />
   <text id="time">...</text>
   <text id="details">...</text>
+  <image id="icon" href="images/steps.png" />
   <text id="steps">...</text>
 </svg>

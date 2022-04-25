@@ -35,6 +35,14 @@ text {
   fill: white;
   text-anchor: start;
   font-size: 22;
-  x: 55%;
-  y: 84%;
+  x: 62%;
+  y: 85%;
+}
+
+#icon {
+    width: 24;
+    height: 24;
+    x: 53%;
+    y: 80%;
+    fill: white;
 }
