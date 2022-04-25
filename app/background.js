@@ -34,13 +34,13 @@ export function changeBackgroundImg(data, lastCondition) {
                 }
             }
             else {
-                if(currentCondition == 0) { img.href = "images/dayClear.jpg"; }
-                else if (currentCondition == 1) { img.href = "images/dayPartlyCloudy.jpg"; }
-                else if (currentCondition == 2) { img.href = "images/dayCloudy.jpg"; }
-                else if (currentCondition == 3) { img.href = "images/dayCloudy.jpg"; }
-                else if (currentCondition == 4) { img.href = "images/dayCloudy.jpg"; }
-                else if (currentCondition == 5) { img.href = "images/dayCloudy.jpg"; }
-                else if (currentCondition == 6) { img.href = "images/dayCloudy.jpg"; }
+                if(currentCondition === 0) { img.href = "images/dayClear.jpg"; }
+                else if (currentCondition === 1) { img.href = "images/dayPartlyCloudy.jpg"; }
+                else if (currentCondition === 2) { img.href = "images/dayCloudy.jpg"; }
+                else if (currentCondition === 3) { img.href = "images/dayCloudy.jpg"; }
+                else if (currentCondition === 4) { img.href = "images/dayCloudy.jpg"; }
+                else if (currentCondition === 5) { img.href = "images/dayCloudy.jpg"; }
+                else if (currentCondition === 6) { img.href = "images/dayCloudy.jpg"; }
                 else { img.href = "images/dayClear.jpg"; }
             }
         }
