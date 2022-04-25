@@ -26,7 +26,7 @@ export function changeBackgroundImg(data, lastCondition) {
                 img.href = "images/sunrise.jpg";
             }
             else if (status.isSunset) {
-                if(currentCondition !== 0) {
+                if(currentCondition !== 0 && currentCondition !== 1) {
                     img.href = "images/sunrise.jpg";
                 }
                 else {
