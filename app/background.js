@@ -45,7 +45,7 @@ export function changeBackgroundImg(data, lastCondition) {
             }
         }
         else {
-            if(currentCondition == 0) { img.href = "images/nightClear.jpg"; }
+            if(currentCondition === 0 || currentCondition === 1) { img.href = "images/nightClear.jpg"; }
             else { img.href = "images/nightCloudy.jpg"; }
         }
 
