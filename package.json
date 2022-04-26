@@ -3,7 +3,6 @@
     "@fitbit/sdk": "~6.1.0"
   },
   "fitbit": {
-    "appUUID": "d7c8b07d-d2f7-4d6f-82bc-c9b6dd648c8d",
     "appType": "clockface",
     "appDisplayName": "newFace",
     "iconFile": "resources/icon.png",
