@@ -19,7 +19,7 @@
     ],
     "i18n": {
       "en-US": {
-        "name": "newFace"
+        "name": "weatherPlantFace"
       }
     },
     "defaultLanguage": "en-US"
