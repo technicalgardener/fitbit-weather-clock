@@ -1,6 +1,6 @@
 import * as messaging from "messaging";
 import { geolocation } from "geolocation";
-import { mapCode } from "../common/util";
+import { mapCode } from "../common/constants";
 
 const apiKey = "";
 const endpoint = "https://api.openweathermap.org/data/2.5/weather?";
@@ -14,9 +14,8 @@ let handleCallback;
 
 function queryLocation(callback) {
     handleCallback = callback;
-    console.log("querying Location");
+  
     geolocation.getCurrentPosition(function(position) {
-        console.log("location: " + position.coords.latitude + ", " + position.coords.longitude);
         latitude  = position.coords.latitude;
         longitude = position.coords.longitude;
         handleCallback();
@@ -39,7 +38,8 @@ function queryWeather(url) {
                 unit:            "K",
                 condition:       data.weather[0].id,
                 conditionCode:   condition,
-                conditionString: data.weather[0].main,
+                conditionString: data.weather[0].description,
+                clouds:          data.clouds.all,
                 currentTime:     data.dt,
                 sunrise:         data.sys.sunrise,
                 sunset:          data.sys.sunset
@@ -57,18 +57,11 @@ function queryWeather(url) {
 function returnWeatherData(data) {
     if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
         messaging.peerSocket.send(data);
-    } else {
+    } 
+    
+    else {
         console.error(`Error: Connection is not open`);
     }
-}
-
-function locationSuccess(position) {
-    latitude  = position.coords.latitude;
-    longitude = position.coords.longitude;
-}
-
-function locationError(err) {
-    console.error(`Location Error: ${err.code}: ${err.message}`);
 }
 
 messaging.peerSocket.addEventListener("message", (evt) => {
