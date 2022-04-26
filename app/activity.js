@@ -15,17 +15,20 @@ export function initialize(callback) {
             if (display.on) {
                 activityHandler();
                 intervalID = setInterval(activityHandler, activityWakeTime);
-            } else {
+            } 
+            
+            else {
                 clearInterval(intervalID);
             }
         });
         
-    } else {
+    } 
+
+    else {
         console.error(`Permission not granted for user activity`);
         callback({ steps: 0 });
     }
 }
-
 
 function activityHandler() {
         handleCallback({ steps: (today.adjusted.steps || 0)});
