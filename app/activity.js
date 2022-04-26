@@ -21,7 +21,6 @@ export function initialize(callback) {
                 clearInterval(intervalID);
             }
         });
-        
     } 
 
     else {
