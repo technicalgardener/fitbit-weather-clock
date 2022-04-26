@@ -10,6 +10,9 @@ let month;
 let dateNum;
 let dateString;
 
+// Initialize Clock
+// This function starts the clock that is used to update the display.
+// The clock is set to update every minute.
 export function initialize(granularity, callback) {
     handleCallback = callback;
     clock.granularity = granularity ? granularity : "minutes";
@@ -17,6 +20,7 @@ export function initialize(granularity, callback) {
     clock.addEventListener("tick", clockHandler);
 }
 
+// Fetch Date
 function fetchDate() {
     date    = new Date();
     day     = days[date.getDay()];
@@ -25,6 +29,10 @@ function fetchDate() {
     dateString = `${day}, ${month} ${dateNum}`;
 }
 
+// Clock Handler
+// Handles the return of the current time and date to be displayed. The time is 
+// updated every minute, however, the date is only updated when the date changes 
+// from the last poll to prevent an unnecessary call to redraw the same date.
 function clockHandler(evt) {
     const today = evt ? evt.date : new Date();
     const mins  = zeroPad(today.getMinutes());

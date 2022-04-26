@@ -13,6 +13,11 @@ let lastStatus = {
 
 const img = document.getElementById("img");
 
+// Change Background Image
+// Evaluates time of day status and current weather conditions to control which
+// background image is chosen to display. If there is no change in status or
+// conditions from the last poll, then the display is not updated to prevent
+// an unnecessary call to redraw the same background image.
 export function changeBackgroundImg(data) {
     currentCondition = data.conditionCode;
     currentStatus = {
@@ -58,6 +63,9 @@ export function changeBackgroundImg(data) {
     }
 }
 
+
+// Status Changed
+// Helper function for changeBackgroundImg
 function statusChanged() {
     if (currentStatus.isDay !== lastStatus.isDay || currentStatus.isSunrise !== lastStatus.isSunrise || currentStatus.isSunset !== lastStatus.isSunset) {
         return true;
@@ -66,6 +74,8 @@ function statusChanged() {
     return false;
 }
 
+// Condition Changed
+// Helper function for changeBackgroundImg
 function conditionChanged() {
     if (currentCondition !== lastCondition) {
         return true;

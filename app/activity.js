@@ -7,6 +7,12 @@ let handleCallback;
 let intervalID;
 const accessPermission = me.permissions.granted("access_activity");
 
+// Initialize Activity
+// This function starts and controls the peeking and return of step activity.
+// The peeking of step activity data only occurs if the display is on at an
+// interval of the value of activityWakeTime. When the display is off
+// the call for step activity is stopped to conserve battery and prevent
+// unnecessary updates.
 export function initialize(callback) {
     handleCallback = callback;
   
@@ -29,6 +35,9 @@ export function initialize(callback) {
     }
 }
 
+// Activity Handler
+// Returns the step activity data to the callback function passed
+// as a parameter to the initialize function.
 function activityHandler() {
         handleCallback({ steps: (today.adjusted.steps || 0)});
 }

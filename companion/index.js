@@ -5,13 +5,14 @@ import { mapCode } from "../common/constants";
 const apiKey = "";
 const endpoint = "https://api.openweathermap.org/data/2.5/weather?";
 
+let handleCallback;
 let latitude;
 let longitude;
-
 let ForecastURL;
 
-let handleCallback;
-
+// Query Location
+// Retrieves the current gps location from the companion and then
+// returns it to the callback (fetchWeatherData).
 function queryLocation(callback) {
     handleCallback = callback;
   
@@ -22,11 +23,16 @@ function queryLocation(callback) {
     });
 }
 
+// Fetch Weather Data
+// Assembles the url needed for the api call and sends it to queryWeather to be processed.
 function fetchWeatherData() {
     ForecastURL = endpoint + "lat=" + latitude + "&lon=" + longitude + "&appid=" + apiKey;
     queryWeather(ForecastURL);
 }
 
+// Query Weather
+// Fetches and records the most up-to-date weather information from  openweathermap.org to
+// be sent back to the device.
 function queryWeather(url) {
     fetch(url).then(function (response) {
         response.json().then(function (data) {
@@ -54,6 +60,8 @@ function queryWeather(url) {
     });
 }
 
+// Return Weather Data
+// Sends the weather data as a message back to the device.
 function returnWeatherData(data) {
     if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
         messaging.peerSocket.send(data);
