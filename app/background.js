@@ -1,31 +1,33 @@
-import { secondsPerHour } from "../common/constants";
+import { isDay, isSunrise, isSunset} from "../common/util";
 import document from "document";
 
 let currentCondition;
-let lastStatus;
+let lastCondition;
+let currentStatus;
+let lastStatus = {
+  isDay: false,
+  isNight: false,
+  isSunrise: false,
+  isSunset: false
+};
 
 const img = document.getElementById("img");
 
-export function changeBackgroundImg(data, lastCondition) {
-    console.log(`Running background Check`);
+export function changeBackgroundImg(data) {
     currentCondition = data.conditionCode;
-    let status = {
+    currentStatus = {
         isDay:     isDay(data),
-        isNight:   isNight(data),
         isSunrise: isSunrise(data),
         isSunset:  isSunset(data)
-
     };
-    console.log(JSON.stringify(status));
-    if (status !== lastStatus && currentCondition !== lastCondition) {
-        console.log(`Background Image Requested`);
-        console.log(`Condition: ${currentCondition}`);
 
-        if(status.isDay) {
-            if (status.isSunrise) {
+    if (statusChanged() && conditionChanged()) {
+        if(currentStatus.isDay) {
+            if (currentStatus.isSunrise) {
                 img.href = "images/sunrise.jpg";
             }
-            else if (status.isSunset) {
+
+            else if (currentStatus.isSunset) {
                 if(currentCondition !== 0 && currentCondition !== 1) {
                     img.href = "images/sunrise.jpg";
                 }
@@ -33,6 +35,7 @@ export function changeBackgroundImg(data, lastCondition) {
                     img.href = "images/sunset.jpg";
                 }
             }
+
             else {
                 if(currentCondition === 0) { img.href = "images/dayClear.jpg"; }
                 else if (currentCondition === 1) { img.href = "images/dayPartlyCloudy.jpg"; }
@@ -44,41 +47,29 @@ export function changeBackgroundImg(data, lastCondition) {
                 else { img.href = "images/dayClear.jpg"; }
             }
         }
+
         else {
             if(currentCondition === 0 || currentCondition === 1) { img.href = "images/nightClear.jpg"; }
             else { img.href = "images/nightCloudy.jpg"; }
         }
 
-        lastStatus = status;
+        lastStatus = currentStatus;
         lastCondition = currentCondition
     }
+}
+
+function statusChanged() {
+    if (currentStatus.isDay !== lastStatus.isDay || currentStatus.isSunrise !== lastStatus.isSunrise || currentStatus.isSunset !== lastStatus.isSunset) {
+        return true;
+    }
+
+    return false;
+}
+
+function conditionChanged() {
+    if (currentCondition !== lastCondition) {
+        return true;
+    }
     
-}
-
-function isSunrise(data) {
-    if (data.currentTime < (data.sunrise + 1 * secondsPerHour ) && data.currentTime > data.sunrise) {
-        return true;
-    }
-    return false;
-}
-
-function isSunset(data) {
-    if (data.currentTime > (data.sunset - 1 * secondsPerHour ) && data.currentTime < data.sunset) {
-        return true;
-    }
-    return false;
-}
-
-function isDay(data) {
-    if (data.currentTime > data.sunrise && data.currentTime < data.sunset) {
-        return true;
-    }
-    return false;
-}
-
-function isNight(data) {
-    if (data.currentTime > data.sunset || data.currentTime < data.sunrise) {
-        return true;
-    }
     return false;
 }
