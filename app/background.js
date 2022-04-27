@@ -1,4 +1,4 @@
-import { isDay, isSunrise, isSunset} from "../common/util";
+import { isDay, isSunrise, isSunset, isNight } from "../common/util";
 import document from "document";
 
 let currentCondition;
@@ -22,6 +22,7 @@ export function changeBackgroundImg(data) {
     currentCondition = data.conditionCode;
     currentStatus = {
         isDay:     isDay(data),
+        isNight:   isNight(data),
         isSunrise: isSunrise(data),
         isSunset:  isSunset(data)
     };
@@ -67,7 +68,7 @@ export function changeBackgroundImg(data) {
 // Status Changed
 // Helper function for changeBackgroundImg
 function statusChanged() {
-    if (currentStatus.isDay !== lastStatus.isDay || currentStatus.isSunrise !== lastStatus.isSunrise || currentStatus.isSunset !== lastStatus.isSunset) {
+    if (currentStatus.isDay !== lastStatus.isDay || currentStatus.isSunrise !== lastStatus.isSunrise || currentStatus.isSunset !== lastStatus.isSunset || currentStatus.isNight !== lastStatus.isNight) {
         return true;
     }
 

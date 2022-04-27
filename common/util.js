@@ -38,3 +38,11 @@ export function isDay(data) {
     
     return false;
 }
+
+export function isNight(data) {
+    if (data.currentTime > data.sunset || data.currentTime < data.sunrise) {
+      return true;
+    }
+  
+  return false;
+}
