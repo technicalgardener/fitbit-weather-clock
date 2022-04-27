@@ -1,7 +1,7 @@
 const millisecondsPerSecond   = 1000;
 const millisecondsPerMinute   = 1000 * 60;
 export const secondsPerHour   = 60 * 60;
-export const weatherWakeTime  = .33 * millisecondsPerMinute;
+export const weatherWakeTime  = 30 * millisecondsPerMinute;
 export const activityWakeTime = 15 * millisecondsPerSecond;
 export const locationTimeout  = 60 * millisecondsPerSecond;
 
