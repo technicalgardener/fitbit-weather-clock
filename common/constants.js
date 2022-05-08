@@ -1,7 +1,7 @@
 const millisecondsPerSecond   = 1000;
 const millisecondsPerMinute   = 1000 * 60;
 export const secondsPerHour   = 60 * 60;
-export const weatherWakeTime  = 30 * millisecondsPerMinute;
+export const weatherWakeTime  = 20 * millisecondsPerMinute;
 export const activityWakeTime = 15 * millisecondsPerSecond;
 export const locationTimeout  = 60 * millisecondsPerSecond;
 
@@ -10,12 +10,14 @@ export const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "
 
 export const conditions = {
     clear:           0,
-    scatteredClouds: 1,
-    cloudy:          2,
-    rain:            3,
-    thunderstorm:    4,
-    snow:            5,
-    atmosphere:      6,
+    fewClouds:       1,
+    scatteredClouds: 2,
+    brokenClouds:    3,
+    cloudy:          4,
+    rain:            5,
+    thunderstorm:    6,
+    snow:            7,
+    atmosphere:      8,
     undef:           9
 }
 
@@ -76,9 +78,9 @@ export const mapCode = {
 
     800: conditions.clear,
 
-    801: conditions.scatteredClouds,
+    801: conditions.fewClouds,
     802: conditions.scatteredClouds,
-    803: conditions.cloudy,
+    803: conditions.brokenClouds,
 
     804: conditions.cloudy
 }
