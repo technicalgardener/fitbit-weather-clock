@@ -19,6 +19,8 @@ const img = document.getElementById("img");
 // conditions from the last poll, then the display is not updated to prevent
 // an unnecessary call to redraw the same background image.
 export function changeBackgroundImg(data) {
+    //console.log(`Performing background image check`);
+    
     currentCondition = data.conditionCode;
     currentStatus = {
         isDay:     isDay(data),
@@ -26,37 +28,100 @@ export function changeBackgroundImg(data) {
         isSunrise: isSunrise(data),
         isSunset:  isSunset(data)
     };
+  
+    //console.log(`Status changed? ` + statusChanged());
+    //console.log(`Condition changed? ` + conditionChanged());
 
     if (statusChanged() && conditionChanged()) {
         if(currentStatus.isDay) {
+            console.log(`Condition: ${currentCondition}`);
             if (currentStatus.isSunrise) {
-                img.href = "images/sunrise.jpg";
+                switch (currentCondition) {
+                  case 0: img.href = "images/SunriseClear.png";
+                    break;
+                  case 1: img.href = "images/SunriseScatteredClouds.png";
+                    break;
+                  case 2: img.href = "images/SunrisetScatteredClouds.png";
+                    break;
+                  case 3: img.href = "images/SunriseOvercast.png";
+                    break;
+                  case 4: img.href = "images/SunriseOvercast.png";
+                    break;
+                  case 8: img.href = "images/SunriseScatteredClouds.png";
+                    break;
+                  default: img.href = "images/SunriseOvercast.png"
+                    break;
+                }
             }
 
             else if (currentStatus.isSunset) {
-                if(currentCondition !== 0 && currentCondition !== 1) {
-                    img.href = "images/sunrise.jpg";
-                }
-                else {
-                    img.href = "images/sunset.jpg";
+                switch (currentCondition) {
+                  case 0: img.href = "images/SunsetClear.png";
+                    break;
+                  case 1: img.href = "images/SunsetFewClouds.png";
+                    break;
+                  case 2: img.href = "images/SunsetScatteredClouds.png";
+                    break;
+                  case 3: img.href = "images/SunsetOvercast.png";
+                    break;
+                  case 4: img.href = "images/SunsetOvercast.png";
+                    break;
+                  case 8: img.href = "images/SunsetScatteredClouds.png";
+                    break;
+                  default: img.href = "images/SunsetOvercast.png";
+                    break;
                 }
             }
 
             else {
-                if(currentCondition === 0) { img.href = "images/dayClear.jpg"; }
-                else if (currentCondition === 1) { img.href = "images/dayPartlyCloudy.jpg"; }
-                else if (currentCondition === 2) { img.href = "images/dayCloudy.jpg"; }
-                else if (currentCondition === 3) { img.href = "images/dayCloudy.jpg"; }
-                else if (currentCondition === 4) { img.href = "images/dayCloudy.jpg"; }
-                else if (currentCondition === 5) { img.href = "images/dayCloudy.jpg"; }
-                else if (currentCondition === 6) { img.href = "images/dayCloudy.jpg"; }
-                else { img.href = "images/dayClear.jpg"; }
+                switch (currentCondition) {
+                  case 0: img.href = "images/DayClear.png";
+                    break;
+                  case 1: img.href = "images/DayFewClouds.png";
+                    break;
+                  case 2: img.href = "images/DayScatteredClouds.png";
+                    break;
+                  case 3: img.href = "images/DayBrokenClouds.png";
+                    break;
+                  case 4: img.href = "images/DayOvercast.png";
+                    break;
+                  case 5: img.href = "images/DayRain.png";
+                    break;
+                  case 6: img.href = "images/NightOvercast.png";
+                    break;
+                  case 7: img.href = "images/DayRain.png";
+                    break;
+                  case 8: img.href = "images/DayAtmosphere.jpg";
+                    break;
+                  default: img.href = "images/DayFewClouds.png";
+                    break;
+                }
             }
         }
 
         else {
-            if(currentCondition === 0 || currentCondition === 1) { img.href = "images/nightClear.jpg"; }
-            else { img.href = "images/nightCloudy.jpg"; }
+            switch (currentCondition) {
+              case 0: img.href = "images/NightClear.png";
+                break;
+              case 1: img.href = "images/NightFewClouds.png";
+                break;
+              case 2: img.href = "images/NightScatteredClouds.png";
+                break;
+              case 3: img.href = "images/NightOvercast.png";
+                break;
+              case 4: img.href = "images/NightOvercast.png";
+                break;
+              case 5: img.href = "images/NightRain.png";
+                break;
+              case 6: img.href = "images/NightRain.png";
+                break;
+              case 7: img.href = "images/NightRain.png";
+                break;
+              case 8: img.href = "images/NightAtmosphere.png";
+                break;
+              default: img.href = "images/NightFewClouds.png";
+                break;
+            }
         }
 
         lastStatus = currentStatus;
