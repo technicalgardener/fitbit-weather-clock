@@ -16,7 +16,7 @@ export function toFahrenheit(data) {
 }
 
 export function isSunrise(data) {
-    if (data.currentTime <= (data.sunrise + 1 * secondsPerHour ) && data.currentTime >= data.sunrise) {
+    if (data.currentTime <= (data.sunrise + 1 * secondsPerHour ) && data.currentTime >= data.sunrise - 0.5 * secondsPerHour) {
         return true;
     }
 
@@ -24,7 +24,7 @@ export function isSunrise(data) {
 }
 
 export function isSunset(data) {
-    if (data.currentTime >= (data.sunset - 1 * secondsPerHour ) && data.currentTime <= data.sunset) {
+    if (data.currentTime >= (data.sunset - 1 * secondsPerHour ) && data.currentTime <= data.sunset + 0.5 * secondsPerHour) {
         return true;
     }
 
@@ -32,7 +32,7 @@ export function isSunset(data) {
 }
 
 export function isDay(data) {
-    if (data.currentTime > data.sunrise && data.currentTime < data.sunset) {
+    if (data.currentTime > data.sunrise + 0.5 * secondsPerHour && data.currentTime < data.sunset - 0.5 * secondsPerHour) {
         return true;
     }
     
@@ -40,7 +40,7 @@ export function isDay(data) {
 }
 
 export function isNight(data) {
-    if (data.currentTime > data.sunset || data.currentTime < data.sunrise) {
+    if (data.currentTime > data.sunset + 0.5 * secondsPerHour || data.currentTime < data.sunrise - 0.5 * secondsPerHour) {
       return true;
     }
   
